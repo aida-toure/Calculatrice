@@ -7,49 +7,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="root" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="root" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculatrice.Controllers.CalculatriceController">
    <children>
-      <VBox id="frame" fx:id="frame" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: blue;">
+      <VBox id="frame" fx:id="frame" prefHeight="400.0" prefWidth="300.0">
          <children>
             <Label id="title" fx:id="title" alignment="CENTER" prefHeight="25.0" prefWidth="500.0" style="-fx-background-color: #E0B0FF;" text="Calculatrice">
                <font>
                   <Font name="Century" size="20.0" />
                </font>
             </Label>
-            <AnchorPane fx:id="content" prefHeight="365.0" prefWidth="289.0">
+            <AnchorPane fx:id="calculator" prefHeight="365.0" prefWidth="289.0">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
                <children>
-                  <VBox fx:id="layout" prefHeight="365.0" prefWidth="289.0">
+                  <VBox fx:id="layoutCalculator" prefHeight="365.0" prefWidth="289.0">
                      <children>
                         <Label fx:id="result" prefHeight="47.0" prefWidth="289.0" text="Label" />
                         <TilePane fx:id="buttons" prefHeight="265.0" prefWidth="249.0">
                            <children>
-                              <Label fx:id="button" text="Label" />
-                              <Label fx:id="button1" text="Label" />
-                              <Label fx:id="button2" text="Label" />
-                              <Label fx:id="button3" text="Label" />
-                              <Label fx:id="button4" text="Label" />
-                              <Label fx:id="button5" text="Label" />
-                              <Label fx:id="button6" text="Label" />
-                              <Label fx:id="button7" text="Label" />
-                              <Label fx:id="button8" text="Label" />
-                              <Label fx:id="button9" text="Label" />
-                              <Label fx:id="button10" text="Label" />
-                              <Label fx:id="button11" text="Label" />
-                              <Label fx:id="button12" text="Label" />
-                              <Label fx:id="button13" text="Label" />
-                              <Label fx:id="button14" text="Label" />
-                              <Label fx:id="button15" text="Label" />
-                              <Label fx:id="button16" text="Label" />
-                              <Label fx:id="button17" text="Label" />
-                              <Label fx:id="button18" text="Label" />
-                              <Label fx:id="button19" text="Label" />
+                              <Label fx:id="buttonOne" style="-fx-background-color: blue;" text="Label" />
                            </children>
                         </TilePane>
                      </children>
                   </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="history" prefHeight="365.0" prefWidth="289.0">
+               <children>
+                  <VBox fx:id="layoutHistory" prefHeight="365.0" prefWidth="289.0" />
                </children>
             </AnchorPane>
          </children>

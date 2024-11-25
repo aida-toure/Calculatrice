@@ -1,6 +1,5 @@
 package com.example.calculatrice;
 
-import com.example.calculatrice.UI.Entities.UI;
 import com.example.calculatrice.UI.Manager.UIManager;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -13,11 +12,11 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("files/FXML/calculatrice-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), UI.sizeXAbsoluteWindow, UI.sizeYAbsoluteWindow);
+        Scene scene = new Scene(fxmlLoader.load(), UIManager.sizeXAbsoluteWindow, UIManager.sizeYAbsoluteWindow);
         stage.setTitle("Bienvenue | Calculatrice !");
         stage.setScene(scene);
 
-        UIManager.createUI(stage);
+        UIManager.createUI();
         stage.show();
 
         stage.widthProperty().addListener((object, oldWidth, newWidth) ->{

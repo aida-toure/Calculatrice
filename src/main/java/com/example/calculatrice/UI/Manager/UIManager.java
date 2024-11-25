@@ -1,85 +1,61 @@
 package com.example.calculatrice.UI.Manager;
 
-import com.example.calculatrice.UI.Entities.UI;
+import com.example.calculatrice.Controllers.CalculatriceController;
+import com.example.calculatrice.UI.Entities.Button;
+import com.example.calculatrice.UI.Entities.Buttons;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
+
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.transform.Affine;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class UIManager {
-    ArrayList<Tab> tabs = new ArrayList<>();
-    public static void setProperties(Node node) {
-        if (node.getId().equals("calculator")) {
+    // attributes -----------------------------------//
+    // info related to window
+    public final static Integer sizeXAbsoluteWindow = 500;
+    public final static Integer sizeYAbsoluteWindow = 600;
 
-        }else if (node.getId().equals("history")) {
+    private Integer oldSizeXAbsoluteWindow = 500;
+    private Integer oldSizeYAbsoluteWindow = 600;
+    // info related to a specific node
+    public String id;
 
-        }else if (node.getId().equals("title")) {
-            Label title = (Label) node;
-            VBox parent = (VBox) node.getParent();
-            title.prefWidth(parent.getWidth());
-            title.prefHeight((double)(10/100) * parent.getHeight()); // 10 percent of the user's screen height size
-        }else if (node.getId().equals("frame")){
-            VBox layout = (VBox) node;
-            AnchorPane parent = (AnchorPane) layout.getParent();
-
-            layout.prefWidth(500);
-            layout.prefHeight(parent.getHeight()); // 10 percent of the user's screen height size
-
-            System.out.println(layout.getWidth());
-            System.out.println(parent.getWidth());
-        }else if (node.getId().equals("layout")){ // aka calculator screen
-            node = (Pane) node;
-            for (Node child1 : ((Pane) node).getChildren()){
-                if (child1.getId().equals("buttons")){
-                    TilePane buttons = (TilePane) child1;
-                    buttons.prefWidth(buttons.getParent().getTranslateX());
-                    buttons.prefHeight((double) (75/100)*buttons.getParent().getTranslateY());
-                    buttons.setTranslateX(0);
-                    buttons.setTranslateY(0);
-                    buttons.setHgap(10);
-                    buttons.setVgap(10);
-                    for (Node child2 : buttons.getChildren()) {
-                        if (child2.getId().contains("button")) {
-                            Label button = (Label) child2;
-                            button.prefWidth((double) (20/100)*buttons.getTranslateX() - buttons.getHgap());
-                            button.prefHeight((double) (25/100)*buttons.getTranslateY() - buttons.getVgap());
-                            button.setTranslateX(0);
-                            button.setTranslateY(0);
-                        }
-                    }
-                } else if (child1.getId().equals("result")) {
-                    child1.prefWidth(UI.sizeXAbsoluteWindow);
-                    child1.prefHeight((double) (24/100)*UI.sizeYAbsoluteWindow);
-                    child1.setTranslateX(0);
-                    child1.setTranslateY(0);
-                }
-            }
-        }
+    // constructor-----------------------------------//
+    public UIManager(String id){
+        this.id = id;
     }
-    protected static void resetElementTransform(String renderChoice, AnchorPane root){
+
+    // methods ---------------------------------------//
+    public static void setProperties(Node node) {
+
+    }
+    protected static void completeUI(String renderChoice, AnchorPane root){
         //set the size of the panes  & bend the children's size (nodes except pane) to the parent
-        root.prefWidth(UI.sizeXAbsoluteWindow);
-        root.prefHeight(UI.sizeYAbsoluteWindow); // 10 percent of the user's screen height size
+        root.prefWidth(sizeXAbsoluteWindow);
+        root.prefHeight(sizeXAbsoluteWindow); // 10 percent of the user's screen height size
 
         root.setTranslateX(0);
         root.setTranslateY(0);
-        if (renderChoice.equals("MIN")){
+        if (renderChoice.equals("MIN")) {
             LinkedList<Node> nodeToLookAT = new LinkedList<>();
             nodeToLookAT.add(root);
             while (!nodeToLookAT.isEmpty()) {
                 Node currentNode = nodeToLookAT.poll();
+
                 if (currentNode instanceof Pane) {
                     Pane pane = (Pane) currentNode;
                     setProperties(currentNode);
@@ -87,14 +63,66 @@ public class UIManager {
                         nodeToLookAT.addFirst(child);
                     }
                 } else {
-                    // redimentionner à son parent
-                    setProperties(currentNode);
+                    //Complete the this
+                        if (currentNode.getId().contains("button"))
+                            for (Button button : Buttons.buttons) {
+                                    System.out.println("yes2");
+                                    // complete UI
+                                    button.setButton(currentNode);
+                                    // modify some properties
+                                    List<Property> properties = new ArrayList<>();
+                                    TilePane parent = (TilePane) currentNode.getParent();
+                                    DoubleProperty xSize = new SimpleDoubleProperty(((100.0 / 4.0) * parent.getWidth()) - parent.getHgap());
+                                    properties.add(xSize);
+                                    DoubleProperty ySize = new SimpleDoubleProperty(((100.0 / 5.0) * parent.getHeight()) - parent.getVgap());
+                                    properties.add(ySize);
+                                    DoubleProperty xPos = new SimpleDoubleProperty(0.0);
+                                    properties.add(xPos);
+                                    DoubleProperty yPos = new SimpleDoubleProperty(0.0);
+                                    properties.add(yPos);
+                                    CalculatriceController init = new CalculatriceController();
+                                    init.setProperties(currentNode, properties);
+                        } else if (currentNode.getId().contains("title")) {
+                            // modify some properties
+                            List<Property> properties = new ArrayList<>();
+                            VBox parent = (VBox) currentNode.getParent(); // name parent : frame
+                            DoubleProperty xSize = new SimpleDoubleProperty(parent.getWidth());
+                            properties.add(xSize);
+                            DoubleProperty ySize = new SimpleDoubleProperty(((100.0 / 10.0) * parent.getHeight()));
+                            properties.add(ySize);
+                            DoubleProperty xPos = new SimpleDoubleProperty(0.0);
+                            properties.add(xPos);
+                            DoubleProperty yPos = new SimpleDoubleProperty(0.0);
+                            properties.add(yPos);
+
+                            CalculatriceController init = new CalculatriceController();
+                            init.setProperties(currentNode, properties);
+                        }
                 }
             }
         }
     }
-    public static void createUI (Stage stage){
-        AnchorPane root = (AnchorPane) stage.getScene().getRoot();
+    public static void createUI (){
+        // /!\ Node, Height and Width are added -> method : resetElementTransform
+        // create each buttons----------------------------//
+        // ----- numbers
+        Button one = new Button("Button1", '1');
+        Button two = new Button("Button3", '2');
+        Button three = new Button("Button3",'3');
+        Button four = new Button("Button4", '4');
+        Button five = new Button("Button5", '5');
+        Button six = new Button("Button6", '6');
+        Button seven = new Button("Button7", '7');
+        Button eight = new Button("Button8", '8');
+        Button nine = new Button("Button9", '9');
+        // ----- operators
+        Button add = new Button("Button+", '+');
+        Button sub = new Button("Button-", '-');
+        Button multuply = new Button("Button*", '*');
+        Button divide = new Button("Button/", '/');
+        // ----- delimiters
+        Button openParenthese = new Button("Button(", '(');
+        Button closeParenthese = new Button("Button)", '(');
 
     }
     /** tous les éléments du root de la scène sont redimentionnés lorsque la fênetre change de taille.*/
@@ -120,23 +148,32 @@ public class UIManager {
         // -------- case 2.1 : the percentage of x is under 30 percent of the user's window size
         // -------- result 2.1 : the window must have several tabs : MINIMALIST RESULT
         if (percentageX >= 0.0 && percentageX <= 30.00){
-            // get the length of the root pane to get the number of the tabs needed
-            int lengthRoot = root.getChildren().size();
             // proceed to create the tabs
+            completeUI("MIN",root);
             for (Node pane : root.getChildren()){
-                if (!pane.getId().equals("calculator")){
+                if (!pane.getId().equals("calculator")){ // different because calculator is the main pane
                     Tab tab = new Tab();
-                    resetElementTransform("MIN",root);
                     tab.setContent(pane);
                 }
             }
         }
         // -------- case 2.2 : the percentage of x is above 30 percent of the user's window size
         // -------- result 2.2 : one window needed
-
-
+        else if (percentageX > 30.0) {
+            completeUI("MAX",root);
+        }
     }
-    public static void reduce(){
+        // getters and setters--------------------------//
 
+    public String getId() {
+        return id;
     }
+
+    public void setOldSizeXAbsoluteWindow(int oldSizeXAbsoluteWindow) {
+            this.oldSizeXAbsoluteWindow = oldSizeXAbsoluteWindow;
+        }
+
+        public void setOldSizeYAbsoluteWindow(int oldSizeYAbsoluteWindow) {
+            this.oldSizeYAbsoluteWindow = oldSizeYAbsoluteWindow;
+        }
 }
